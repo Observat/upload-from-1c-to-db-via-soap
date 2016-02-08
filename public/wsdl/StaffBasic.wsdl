@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<!-- Generated Mon Feb  8 11:25:56 2016 -->
+
+
+    <definitions
+      xmlns="http://schemas.xmlsoap.org/wsdl/"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+      xmlns:tns="http://soap.dev.gstu.by:8090/StaffBasic"
+      targetNamespace="http://soap.dev.gstu.by:8090/StaffBasic"
+    >
+  
+
+
+    <types>
+      <xsd:schema targetNamespace="http://soap.dev.gstu.by:8090/StaffBasic">
+	<xsd:element name="getCount" type="xsd:string" minOccurs="0"/>
+	<xsd:element name="getCountResponse" type="xsd:ResultIntType" minOccurs="1"/>
+	<xsd:element name="updateAllRecords" type="xsd:StaffBasicGroupType" minOccurs="1"/>
+	<xsd:element name="updateAllRecordsResponse" type="xsd:ResultUpdateType" minOccurs="1"/>
+	<xsd:element name="updateWithoutDeletingRecords" type="xsd:StaffBasicGroupType" minOccurs="1"/>
+	<xsd:element name="updateWithoutDeletingRecordsResponse" type="xsd:ResultUpdateType" minOccurs="1"/>
+    <xsd:complexType name="StaffBasicGroupType">
+      <xsd:sequence>
+        <xsd:element name="StaffBasicElement" type="StaffBasicElementType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  
+  <xsd:complexType name="StaffBasicElementType">
+    <xsd:sequence>
+      <xsd:element name="FAM">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='50'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="IMY">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='50'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="OTCH">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='50'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="MY_NOM">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='14'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="PDR">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='128'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="DLG1">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='128'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+    <xsd:complexType name="ResponseIntType">
+      <xsd:sequence>
+        <xsd:element name="result" type="xsd:int"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="ResponseUpdateType">
+    <xsd:sequence>
+      <xsd:element name="result">
+        <xsd:sequence>
+          <xsd:element name="insert" type="xsd:int"/>
+          <xsd:element name="update" type="xsd:int"/>
+          <xsd:element name="delete" type="xsd:int"/>
+          <xsd:element name="skip" type="xsd:int"/>
+          <xsd:element name="message" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:element>
+    </xsd:sequence>
+    </xsd:complexType>
+  
+      </xsd:schema>
+    </types>
+  
+
+      <message name="getCountRequest">
+        <part name="parameters" element="tns:getCount" />
+      </message>
+      <message name="getCountResponse">
+        <part name="ResponseSoapMsg" element="tns:getCountResponse" />
+      </message>
+    
+
+      <message name="updateAllRecordsRequest">
+        <part name="parameters" element="tns:updateAllRecords" />
+      </message>
+      <message name="updateAllRecordsResponse">
+        <part name="ResponseSoapMsg" element="tns:updateAllRecordsResponse" />
+      </message>
+    
+
+      <message name="updateWithoutDeletingRecordsRequest">
+        <part name="parameters" element="tns:updateWithoutDeletingRecords" />
+      </message>
+      <message name="updateWithoutDeletingRecordsResponse">
+        <part name="ResponseSoapMsg" element="tns:updateWithoutDeletingRecordsResponse" />
+      </message>
+    
+<portType name="StaffBasicPortType">
+
+	<operation name="getCount">
+		<input message="tns:getCountRequest" />
+		<output message="tns:getCountResponse" />
+	</operation>
+    
+
+	<operation name="updateAllRecords">
+		<input message="tns:updateAllRecordsRequest" />
+		<output message="tns:updateAllRecordsResponse" />
+	</operation>
+    
+
+	<operation name="updateWithoutDeletingRecords">
+		<input message="tns:updateWithoutDeletingRecordsRequest" />
+		<output message="tns:updateWithoutDeletingRecordsResponse" />
+	</operation>
+    
+</portType>
+<binding name="StaffBasicBinding" type="tns:StaffBasicPortType">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+	<operation name="getCount">
+		<soap:operation style="document" soapAction="http://soap.dev.gstu.by:8090/StaffBasic#getCount"/>
+		<input>
+			<soap:body use="literal"/>
+		</input>
+		<output>
+			<soap:body use="literal"/>
+		</output>
+	</operation>
+    
+
+	<operation name="updateAllRecords">
+		<soap:operation style="document" soapAction="http://soap.dev.gstu.by:8090/StaffBasic#updateAllRecords"/>
+		<input>
+			<soap:body use="literal"/>
+		</input>
+		<output>
+			<soap:body use="literal"/>
+		</output>
+	</operation>
+    
+
+	<operation name="updateWithoutDeletingRecords">
+		<soap:operation style="document" soapAction="http://soap.dev.gstu.by:8090/StaffBasic#updateWithoutDeletingRecords"/>
+		<input>
+			<soap:body use="literal"/>
+		</input>
+		<output>
+			<soap:body use="literal"/>
+		</output>
+	</operation>
+    
+</binding>
+
+    <service name="StaffBasicService">
+      <port name="StaffBasic" binding="tns:StaffBasicBinding">
+        <soap:address location="http://soap.dev.gstu.by:8090/StaffBasic"/>
+      </port>
+    </service>
+  
+
+</definitions>

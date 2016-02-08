@@ -1,0 +1,44 @@
+server {
+%= '# Generated '.localtime
+	listen <%= $self->{'listen'} %>;
+	server_name <%= $self->{'domain'} %>;
+	root <%= $self->{'webroot_public'} %>;
+
+	access_log  /var/log/nginx/<%= $self->{'domain'} %>/access.log;
+	error_log   /var/log/nginx/<%= $self->{'domain'} %>/error.log;
+
+	autoindex off;
+
+	location / {
+	    deny all;
+	    return 404;
+	}
+
+	location ~ \.html$ {
+#	    try_files ...
+	}
+
+	location ~ ^/([^/]+\.wsdl)$ {
+	    alias <%= $self->{'webroot_public'} %>wsdl/$1;
+	    types        { }
+	    default_type text/xml;
+#	    default_type application/wsdl+xml;
+	}
+
+	location ~ ^/<%= $self->{'class'} %>/?$ {
+#	    allow <IP_сервера_1С>;
+#	    deny  all;
+	    include		/etc/nginx/fastcgi_params;
+
+	    fastcgi_pass	127.0.0.1:1027;
+	    fastcgi_param	SCRIPT_FILENAME <%= $self->{'webroot'} %>script/cgi/<%= $self->{'class'} %>.pl;
+#	    fastcgi_param	QUERY_STRING $query_string;
+#	    fastcgi_param	REMOTE_USER  $remote_user;
+#	    fastcgi_param	FCGIADDR "127.0.0.1";
+#	    fastcgi_param	FCGI_WEB_SERVER_ADDRS "127.0.0.1";
+	}
+
+	location ~ /\.ht {
+	    deny  all;
+	}
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+%= '<!-- Generated '.localtime.' -->'
+% use FindBin;
+% use lib $FindBin::Bin.'/../../lib/';
+% eval( 'require '.$self->{class_base} );
+
+% my $object = $self->{class_base}->new( { 'init_wsdl' => 1 }, { soap_staff_basic_server => $self->{domain}, soap_staff_basic_port => $self->{listen} } );
+%=	$object->wsdl->get_Definitions;
+
+%=	$object->get_wsdl_Types;
+%=	$object->wsdl->get_Messages;
+%=	$object->wsdl->get_PortType;
+%=	$object->wsdl->get_Binding;
+%=	$object->get_wsdl_Service;
+
+</definitions>

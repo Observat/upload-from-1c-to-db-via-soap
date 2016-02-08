@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+%= '# Generated '.localtime
+use SOAP::Lite;
+use SOAP::Transport::HTTP;
+
+SOAP::Transport::HTTP::CGI
+    ->dispatch_to( "<%= $self->{class} %>" )
+    ->options({compress_threshold => 10000})
+    ->handle;
+
+package <%= $self->{class} %>;
+use strict;
+use warnings;
+use utf8;
+
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+
+use base '<%= $self->{class_base} %>';
+
+1;
