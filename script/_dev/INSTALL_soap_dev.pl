@@ -44,6 +44,9 @@ sub _clear {
 }
 
 sub test_prepare {
+  warn 'TODO Проверить права/sudo?';
+  exit; # TODO
+
   if ( -f "${etc_nginx_path}sites-available.d/${domain}.conf" ) {
     die "Already exists ${etc_nginx_path}sites-available.d/${domain}.conf";
   };
@@ -108,7 +111,6 @@ render_nginx();
 _clear(); # TODO
 
 warn 'Checking installed server...';
-# TODO Проверить права/sudo?
 exit unless test_prepare();
 
 warn 'Installing server:';
@@ -123,6 +125,7 @@ warn ' Mkdir in /var/log/nginx/...';
 
 warn ' Coping in webroot...';
 `mkdir -p ${webroot}`;
+# TODO Не все файлы нужны в $webroot. Например, каталог t/, и script/_dev/
 `cp -vR ${from} ${webroot}`;
 # TODO chown?
 

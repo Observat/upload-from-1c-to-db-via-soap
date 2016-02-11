@@ -7,11 +7,6 @@ use ByObservat::UploadFrom1c::From::Soap;
 use ByObservat::UploadFrom1c::To::Dbi;
 use ByObservat::UploadFrom1c::Wsdl;
 
-# TODO Если в wsdl нет операции, а тут есть, то её всё-равно можно вызвать?
-# TODO ? Не отсылать подробностей об ошибке в 1С. Или резать по " at "
-# TODO ? "Ошибка, обратитесь к X, он получил по почте", а Х брать из конфигурации.
-# TODO ? Добавить в конфигурацию общий сервер soap
-
 has 'uid';
 has 'report';
 
@@ -131,6 +126,8 @@ sub update_records {
     $result_split->{'delete'} = $self->to->delete_records( $data_split->{'delete'} );
   };
   $result_split->{'skip'} = scalar @{ $data_split->{'skip'} };
+
+  $result_split->{'expected'} = { map { $_ => scalar @{ $data_split->{$_} } } keys %$data_split };
 
   return $result_split;
 }

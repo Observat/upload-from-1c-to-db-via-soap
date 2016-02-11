@@ -29,7 +29,7 @@ sub new {
     'to' => {
       'table_name' => 'staff_basic',
       'table_key' => 'MY_NOM',
-      'table_fields' => [ qw/FAM IMY OTCH MY_NOM PDR DLG1/ ],
+      'table_fields' => [ qw/FAM IMY OTCH MY_NOM PDR DLG1 TP_ID status/ ],
 #           all_fields: [ qw/FAM IMY OTCH MY_NOM PDR DLG1 NAZVAN TP_ID status teacher/ ];
     },
     'wsdl' => {
@@ -136,6 +136,14 @@ sub get_wsdl_ElementType {
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
             <xsd:maxLength value='128'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="TP_ID" type='xsd:int'/>
+      <xsd:element name="status">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='1'/>
           </xsd:restriction>
         </xsd:simpleType>
       </xsd:element>

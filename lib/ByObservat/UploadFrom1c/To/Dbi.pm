@@ -12,8 +12,6 @@ has 'main_object';
 
 sub report { return $_[0]->main_object->report; }
 
-# TODO Транзакции для insert/update/delete?
-
 sub get_count {
   my ( $self ) = @_;
 
@@ -36,7 +34,7 @@ sub get_record {
   my $result = $self->dbh->selectrow_hashref( $query, undef, $pk );
   unless( defined $result ) {
     if( defined $self->dbh->errstr ) {
-      $self->report->add( "Не удалось получить запись $pk в таблице ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
+      $self->report->add_log( "Не удалось получить запись $pk в таблице ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
     }
     else {
       $self->report->add( "Отсутствует запись $pk в таблице ".$self->table_name, 'info' );
@@ -54,7 +52,7 @@ sub get_all_pk {
 
   my $result = $self->dbh->selectall_arrayref( $query );
   unless( defined $result ) {
-    $self->report->add( "Не удалось получить первичные ключи в таблице ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
+    $self->report->add_log( "Не удалось получить первичные ключи в таблице ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
     return undef;
   }
 
@@ -68,7 +66,7 @@ sub get_all_records {
 
   my $result = $self->dbh->selectall_arrayref( $query, { Slice => {} } );
   unless( defined $result ) {
-    $self->report->add( "Не удалось получить записи в таблице ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
+    $self->report->add_log( "Не удалось получить записи в таблице ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
   }
 
   return $result;
@@ -85,7 +83,7 @@ sub insert_records {
   foreach my $data_row ( @$data ) {
     my $result = $self->dbh->do( $query, undef, @$data_row{ @{$self->table_fields} } );
     if( $result ) {
-      $self->report->add( "Вставлена запись [".( join ', ', @$data_row{ @{$self->table_fields} } )."] в таблицу ".$self->table_name.".", 'notice' );
+      $self->report->add_log( "Вставлена запись [".( join ', ', @$data_row{ @{$self->table_fields} } )."] в таблицу ".$self->table_name.".", 'notice' );
       $count += $result;
     }
     else {
@@ -112,7 +110,7 @@ sub update_records {
       my $message = "Обновлена запись ".$data_row->{$self->table_key}." в таблице ".$self->table_name.". ";
       $message .= "Новое значение [".( join ', ', @$data_row{ @{$self->table_fields} } )."]";
       $message .= ", старое значение [".( join ', ', @$old_row{ @{$self->table_fields} } )."]";
-      $self->report->add( $message, 'notice' );
+      $self->report->add_log( $message, 'notice' );
       $count += $result;
     }
     else {
@@ -133,7 +131,7 @@ sub delete_records {
     my $row = $self->get_record( $pk );
     my $result = $self->dbh->do( $query, undef, $pk );
     if( $result ) {
-      $self->report->add( "Удалена запись [".( join ', ', @$row{ @{$self->table_fields} } )."] из таблицы ".$self->table_name.".", 'notice' );
+      $self->report->add_log( "Удалена запись [".( join ', ', @$row{ @{$self->table_fields} } )."] из таблицы ".$self->table_name.".", 'notice' );
       $count += $result;
     }
     else {

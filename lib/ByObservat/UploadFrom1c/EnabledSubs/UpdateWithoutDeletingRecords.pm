@@ -5,30 +5,33 @@ use utf8;
 our @EXPORT = qw( updateWithoutDeletingRecords );
 
 sub updateWithoutDeletingRecords {
-  # TODO Не помню про тестирование $message_ne
   my ( $self, @data ) = @_;
   my $params = undef;
   $self = $self->_init( $params );
 
   my $result = $self->update_without_deleting_records( \@data );
 
-  my @fields = ( qw/insert update skip/ );
+  my @fields = ( qw/insert update delete skip/ );
+  my %for_message_in =  ( 'insert' => ' добавить', 'update' => ' обновить', 'delete' => 'удалить', 'skip' => 'пропустить' );
+  my %for_message_out = ( 'insert' => 'добавлено', 'update' => 'обновлено', 'delete' => 'удалено', 'skip' => ' пропущено' );
 
-  my $message_ne = undef;
-  my $sum = 0;
+  my $sum_in = 0;
+  my $sum_out = 0;
   foreach( @fields ) {
-    $sum += $result->{$_};
+    next if $_ eq 'delete';
+    $sum_in  += $result->{'expected'}->{$_};
+    $sum_out += $result->{$_};
   };
-  if( scalar( @data ) != $sum ) {
-    $message_ne = ', но количество обработанных не совпадает( получено '.scalar( @data ).", а обработано $sum )";
-  }
 
-  my %for_resume_message = ( 'insert' => 'добавлено', 'update' => 'обновлено', 'skip' => 'пропущено' );
-  my $message = 'Выгрузка '.(ref $self).' выполнена'.($message_ne//'').': ';
-  $message .= join ', ', map { $for_resume_message{$_}.' '.( $result->{$_} // 0 ); } @fields;
-  $message .= ".\n\n".$self->report->result_as_string;
+  my $message = 'Выгрузка '.(ref $self).' выполнена ';
+  $message .= ( $sum_in == $sum_out ) ? 'успешно' : 'с ошибками';
+  # TODO В @data дубликаты есть
+  $message .= ".\nРеально получено ". scalar @data;
+  $message .= ".\nЗапланировано $sum_in: ". join ', ', map { $for_message_in{$_}.' '.( $result->{'expected'}->{$_} // 0 ); } @fields;
+  $message .= ".\nСделано       $sum_out: ". join ', ', map { $for_message_out{$_}.' '.( $result->{$_} // 0 ); } @fields;
+  $message .= ".\n".$self->report->result_as_string;
 
-  if( defined $message_ne or $self->{message_on_email} ) {
+  if( $self->{message_on_email} ) {
     EsapCommon::Log->email( $message, 'notice', $self->uid, { subject => 'Выгрузка '.(ref $self).' выполнена', to => 'soap_mail_to' } );
   };
 

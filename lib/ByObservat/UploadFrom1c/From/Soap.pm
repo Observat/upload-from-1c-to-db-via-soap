@@ -11,7 +11,9 @@ sub report { return $_[0]->main_object->report; }
 sub _fault {
   my ( $self, $message ) = @_;
 
-  eval { $self->report->add_log( $message, 'warning') }; # TODO warning or error ?
+  # TODO Не отсылать подробностей об ошибке в 1С. Или резать по " at "
+  # TODO "Ошибка, обратитесь к X, он получил по почте", а Х брать из конфигурации.
+  eval { $self->report->add_log( $message, 'warning') };
   die SOAP::Fault->new()->faultcode('Server.Custom')->faultstring( $message );
 }
 
@@ -19,7 +21,7 @@ sub getCount {
   my ( $self, $count ) = @_;
 
   my $result_eval = eval {
-    die unless defined $count; # TODO  $@ eq 'Died'?
+    die 'Получено NULL' unless defined $count;
     SOAP::Data->name('result')->type('int')->value( $count );
   };
 
@@ -31,6 +33,7 @@ sub getCount {
   };
 }
 
+=pod
 sub insertRecords {
   my ( $self, $count_ok, $count_must ) = @_;
 
@@ -48,6 +51,7 @@ sub insertRecords {
     return $result_eval;
   };
 }
+=cut
 
 sub updateAllRecords {
   my ( $self, $result_hash ) = @_;
