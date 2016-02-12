@@ -10,22 +10,22 @@ use ByObservat::UploadFrom1c::EnabledSubs::UpdateWithoutDeletingRecords;
 
 my @methods_for_wsdl = qw/ getCount updateAllRecords updateWithoutDeletingRecords /;
 
-use EsapCommon::DB;
+use ByObservat::Proxy::Config;
+use ByObservat::Proxy::Log;
+use ByObservat::Proxy::Db;
 
 sub _get_default_dbh {
   # TODO кто и когда будет отключать этот $dbh?
-#  return undef;
-  return EsapCommon::DB->get_dbh( 'asu-soap' ); # TODO
+  return ByObservat::Proxy::Db->get_dbh( 'asu-soap' );
 }
 
 sub new {
   my ( $self, $params, $soap_config ) = @_;
 
-# TODO  $soap_config //= EsapCommon::Config->get_hash(qw/ soap_staff_basic_server soap_staff_basic_port /);
+  $soap_config //= ByObservat::Proxy::Config->get_hash(qw/ soap_staff_basic_server soap_staff_basic_port soap_staff_basic_uid/);
 
   $params = {
-#    'uid' => Cfg::get->{uid_soap_asu_staff}, # TODO uid из другого места брать?
-    'uid' => 0,
+    'uid' => $soap_config->{soap_staff_basic_uid},
     'to' => {
       'table_name' => 'staff_basic',
       'table_key' => 'MY_NOM',

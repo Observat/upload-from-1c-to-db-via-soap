@@ -32,7 +32,7 @@ sub updateWithoutDeletingRecords {
   $message .= ".\n".$self->report->result_as_string;
 
   if( $self->{message_on_email} ) {
-    EsapCommon::Log->email( $message, 'notice', $self->uid, { subject => 'Выгрузка '.(ref $self).' выполнена', to => 'soap_mail_to' } );
+    ByObservat::Proxy::Log->email( $message, 'notice', $self->uid, { subject => 'Выгрузка '.(ref $self).' выполнена', to => 'soap_mail_to' } );
   };
 
   $result->{'message'} = $message;

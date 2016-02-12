@@ -10,7 +10,7 @@ has 'uid';
 sub new {
   my ( $self, $uid, $module_log ) = @_;
 
-  $module_log //= 'EsapCommon::Log';  # TODO
+  $module_log //= 'ByObservat::Proxy::Log';
 
   $self = $self->SUPER::new( { uid => $uid, module_log => $module_log } );
   if( ! defined $self->{report} ) {
@@ -28,7 +28,7 @@ sub add {
   push @{ $self->{report} }, [ $message, $level ];
 }
 
-sub add_log { # TODO error, если в конструкторе не было $uid и $module_log
+sub add_log {
   my ( $self, $message, $level ) = @_;
 
   $level //= 'info';

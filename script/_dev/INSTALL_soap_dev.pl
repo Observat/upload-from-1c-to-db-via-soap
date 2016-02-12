@@ -6,17 +6,17 @@ use open qw/:std :utf8/;
 use FindBin;
 use Mojo::Template;
 
-# TODO Убрать EsapCommon::* из зависимостей
 # TODO Добавить код выгрузки из 1с
 
 # Если всё сделано правильно, то "wget http://soap.dev.gstu.by:8090/StaffBasic" будет выдавать 411
-# Если 502, то ошибка в cgi-скрипте. Отсутствуют файлы EsapCommon::*
+# Если 502, то ошибка в cgi-скрипте. Например, в lib/ByObservat/Proxy/* используются несуществующие модули
 
 #===== VARS =====
 
-# TODO DNS: добавить $domain в /var/lib/bind/zone/dev.gstu.by, увеличить серийный номер и выполнить service bind reload
-# TODO firewall: добавить $listen в /etc/net/ifaces/default/fw/iptables/filter/INPUT и restart?
-# TODO fcgi-сервер: используется spawn-fcgi
+# DNS: добавить $domain в /var/lib/bind/zone/dev.gstu.by, увеличить серийный номер и выполнить service bind reload
+# firewall: добавить $listen в /etc/net/ifaces/default/fw/iptables/filter/INPUT и restart?
+# fcgi-сервер: используется spawn-fcgi
+# В lib/ByObservat/Proxy подключить свои модули
 
 my $class = 'StaffBasic';
 my $class_base = 'GstuSoap::'.$class;
