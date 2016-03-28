@@ -9,6 +9,8 @@ sub updateAllRecords {
   my $params = undef;
   $self = $self->_init( $params );
 
+  ByObservat::Proxy::Log->add( 'Выгрузка '.(ref $self).' запущена', 'info', $self->uid );
+
   my $result = $self->update_records( \@data );
 
   my @fields = ( qw/insert update delete skip/ );
@@ -28,6 +30,9 @@ sub updateAllRecords {
   $message .= ".\nРеально получено ". scalar @data;
   $message .= ".\nЗапланировано $sum_in: ". join ', ', map { $for_message_in{$_}.' '.( $result->{'expected'}->{$_} // 0 ); } @fields;
   $message .= ".\nСделано       $sum_out: ". join ', ', map { $for_message_out{$_}.' '.( $result->{$_} // 0 ); } @fields;
+
+  ByObservat::Proxy::Log->add( $message, 'info', $self->uid );
+
   $message .= ".\n".$self->report->result_as_string;
 
   if( $self->{message_on_email} ) { # TODO or $result->{'delete'} ?

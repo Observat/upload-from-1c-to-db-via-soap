@@ -85,10 +85,13 @@ sub _split_by_skip {
   foreach my $data_row ( @$data ) {
     my $compare_bool = 1;
 
-    my $row_old = $self->to->get_record( $data_row->{$self->to->table_key} );
-    foreach( keys %$data_row ) {
-      if( exists $row_old->{$_} and $row_old->{$_} eq $data_row->{$_} ) {
+    my $row_new = { %$data_row };
+    my $row_old = $self->to->get_record( $row_new->{$self->to->table_key} );
+
+    foreach( @{$self->to->table_fields} ) {
+      if( ( $row_old->{$_}//'') eq ($row_new->{$_}//'') ) {
         delete $row_old->{$_};
+        delete $row_new->{$_};
       }
       else {
         $compare_bool = 0;
@@ -96,8 +99,7 @@ sub _split_by_skip {
       }
     }
 
-    if( $compare_bool and ! scalar keys %$row_old ) {
-      # совпадают, т.к. 1) все пары из $data_row совпали с $row_old; and 2) в $row_old не осталось лишних пар
+    if( $compare_bool and scalar( keys %$row_old ) == 0 and scalar( keys %$row_new ) == 0 ) {
       push @{$result->{'skip'}}, $data_row;
     }
     else {

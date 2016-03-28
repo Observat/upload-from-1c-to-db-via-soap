@@ -83,11 +83,11 @@ sub insert_records {
   foreach my $data_row ( @$data ) {
     my $result = $self->dbh->do( $query, undef, @$data_row{ @{$self->table_fields} } );
     if( $result ) {
-      $self->report->add_log( "Вставлена запись [".( join ', ', @$data_row{ @{$self->table_fields} } )."] в таблицу ".$self->table_name.".", 'notice' );
+      $self->report->add_log( "Вставлена запись [".( join ', ', map { $_//'' } @$data_row{ @{$self->table_fields} } )."] в таблицу ".$self->table_name.".", 'debug' );
       $count += $result;
     }
     else {
-      $self->report->add_log( "НЕ вставлена запись [".( join ', ', @$data_row{ @{$self->table_fields} } )."] в таблицу ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
+      $self->report->add_log( "НЕ вставлена запись [".( join ', ', map { $_//'' } @$data_row{ @{$self->table_fields} } )."] в таблицу ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
     }
   };
 
@@ -108,9 +108,9 @@ sub update_records {
     my $result = $self->dbh->do( $query, undef, @$data_row{ @fields_for_update }, $data_row->{$self->table_key} );
     if( $result ) {
       my $message = "Обновлена запись ".$data_row->{$self->table_key}." в таблице ".$self->table_name.". ";
-      $message .= "Новое значение [".( join ', ', @$data_row{ @{$self->table_fields} } )."]";
-      $message .= ", старое значение [".( join ', ', @$old_row{ @{$self->table_fields} } )."]";
-      $self->report->add_log( $message, 'notice' );
+      $message .= "Новое значение [".( join ', ', map { $_//'' } @$data_row{ @{$self->table_fields} } )."]";
+      $message .= ", старое значение [".( join ', ', map { $_//'' } @$old_row{ @{$self->table_fields} } )."]";
+      $self->report->add_log( $message, 'debug' );
       $count += $result;
     }
     else {
@@ -131,11 +131,11 @@ sub delete_records {
     my $row = $self->get_record( $pk );
     my $result = $self->dbh->do( $query, undef, $pk );
     if( $result ) {
-      $self->report->add_log( "Удалена запись [".( join ', ', @$row{ @{$self->table_fields} } )."] из таблицы ".$self->table_name.".", 'notice' );
+      $self->report->add_log( "Удалена запись [".( join ', ', map { $_//'' } @$row{ @{$self->table_fields} } )."] из таблицы ".$self->table_name.".", 'debug' );
       $count += $result;
     }
     else {
-      $self->report->add_log( "НЕ удалена запись [".( join ', ', @$row{ @{$self->table_fields} } )."] из таблицы ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
+      $self->report->add_log( "НЕ удалена запись [".( join ', ', map { $_//'' } @$row{ @{$self->table_fields} } )."] из таблицы ".$self->table_name.": ".$self->dbh->errstr, 'warning' );
     }
   }
 
