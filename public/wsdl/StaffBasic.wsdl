@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Generated Tue Feb  9 13:43:36 2016 -->
+<!-- Generated Mon Mar 28 15:00:09 2016 -->
 
 
     <definitions
@@ -28,6 +28,13 @@
   
   <xsd:complexType name="StaffBasicElementType">
     <xsd:sequence>
+      <xsd:element name="TAB_NOM">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='8'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
       <xsd:element name="FAM">
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
@@ -49,7 +56,7 @@
           </xsd:restriction>
         </xsd:simpleType>
       </xsd:element>
-      <xsd:element name="MY_NOM">
+      <xsd:element name="LIN">
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
             <xsd:maxLength value='14'/>
@@ -63,7 +70,7 @@
           </xsd:restriction>
         </xsd:simpleType>
       </xsd:element>
-      <xsd:element name="DLG1">
+      <xsd:element name="DLG">
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
             <xsd:maxLength value='128'/>

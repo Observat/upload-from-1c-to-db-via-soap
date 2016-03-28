@@ -28,9 +28,9 @@ sub new {
     'uid' => $soap_config->{soap_staff_basic_uid},
     'to' => {
       'table_name' => 'staff_basic',
-      'table_key' => 'MY_NOM',
-      'table_fields' => [ qw/FAM IMY OTCH MY_NOM PDR DLG1 TP_ID status/ ],
-#           all_fields: [ qw/FAM IMY OTCH MY_NOM PDR DLG1 NAZVAN TP_ID status teacher/ ];
+      'table_key' => 'TAB_NOM',
+      'table_fields' => [ qw/TAB_NOM FAM IMY OTCH LIN PDR DLG TP_ID status/ ],
+#           all_fields: [ qw/TAB_NOM FAM IMY OTCH LIN PDR DLG NAZVAN TP_ID status teacher/ ];
     },
     'wsdl' => {
       'class' => 'StaffBasic', # TODO
@@ -97,6 +97,13 @@ sub get_wsdl_ElementType {
   return q{
   <xsd:complexType name="StaffBasicElementType">
     <xsd:sequence>
+      <xsd:element name="TAB_NOM">
+        <xsd:simpleType>
+          <xsd:restriction base='xsd:string'>
+            <xsd:maxLength value='8'/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
       <xsd:element name="FAM">
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
@@ -118,7 +125,7 @@ sub get_wsdl_ElementType {
           </xsd:restriction>
         </xsd:simpleType>
       </xsd:element>
-      <xsd:element name="MY_NOM">
+      <xsd:element name="LIN">
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
             <xsd:maxLength value='14'/>
@@ -132,7 +139,7 @@ sub get_wsdl_ElementType {
           </xsd:restriction>
         </xsd:simpleType>
       </xsd:element>
-      <xsd:element name="DLG1">
+      <xsd:element name="DLG">
         <xsd:simpleType>
           <xsd:restriction base='xsd:string'>
             <xsd:maxLength value='128'/>
